@@ -3,17 +3,32 @@ import {
   SET_LOADING,
   CLEAR_USERS,
   GET_USER,
-  GET_REPOS
-} from "../types";
+  GET_REPOS,
+  GET_ORGANIZATIONS
+} from "../actions/types";
 
-export default (state, action) => {
+const initialState = {
+  users: [],
+  user: {},
+  repos: [],
+  organizations: [],
+  loading: false
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
-      case GET_REPOS:
-          return {
-              ... state,
-              repos: action.payload,
-              loading: false
-          };
+    case GET_REPOS:
+      return {
+        ...state,
+        repos: action.payload,
+        loading: false
+      };
+    case GET_ORGANIZATIONS:
+      return {
+        ...state,
+        organizations: action.payload,
+        loading: false
+      };
     case GET_USER:
       return {
         ...state,

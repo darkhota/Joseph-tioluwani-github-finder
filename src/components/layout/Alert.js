@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
-import AlertContext from "../../context/alert/alertContext";
+import React from "react";
+import { connect } from "react-redux";
 
-const Alert = () => {
-  const alertContext = useContext(AlertContext);
-
-  const { alert } = alertContext;
+const Alert = ({ alert }) => {
   return (
     alert !== null && (
       <div className={`alert alert-${alert.type}`}>
@@ -14,4 +11,8 @@ const Alert = () => {
   );
 };
 
-export default Alert;
+const mapStateToProps = state => ({
+  alert: state.alert
+});
+
+export default connect(mapStateToProps)(Alert);

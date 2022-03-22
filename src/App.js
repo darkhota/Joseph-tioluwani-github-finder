@@ -7,29 +7,27 @@ import Alert from "./components/layout/Alert";
 import Home from "./components/pages/Home";
 import NotFound from "./components/pages/NotFound";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import GithubState from "./context/github/GithubState";
-import AlertState from "./context/alert/AlertState";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const App = () => {
   return (
-    <GithubState>
-      <AlertState>
-        <Router>
-          <div className="App">
-            <Navbar />
-            <div className="container">
-              <Alert />
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/about" component={About} />
-                <Route exact path="/user/:login" component={User} />
-                <Route component = {NotFound}/>
-              </Switch>
-            </div>
+    <Provider store={store}>
+      <Router>
+        <div className="App">
+          <Navbar />
+          <div className="container">
+            <Alert />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/about" component={About} />
+              <Route exact path="/user/:login" component={User} />
+              <Route component={NotFound} />
+            </Switch>
           </div>
-        </Router>
-      </AlertState>
-    </GithubState>
+        </div>
+      </Router>
+    </Provider>
   );
 };
 

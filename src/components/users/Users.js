@@ -1,13 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import UserItem from "./UserItem";
 import Spinner from "../layout/Spinner";
-import GithubContext from "../../context/github/githubContext";
 
-const Users = () => {
-  const githubContext = useContext(GithubContext);
-
-  const { loading, users } = githubContext;
-
+const Users = ({ github: { users, loading } }) => {
   if (loading) {
     return <Spinner />;
   } else {
@@ -27,4 +23,8 @@ const userStyle = {
   gridGap: "1rem"
 };
 
-export default Users;
+const mapStateToProps = state => ({
+  github: state.github
+});
+
+export default connect(mapStateToProps)(Users);

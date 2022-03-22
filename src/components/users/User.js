@@ -1,19 +1,31 @@
-import React, { Fragment, useEffect, useContext } from "react";
+import React, { Fragment, useEffect } from "react";
+import { connect } from "react-redux";
 import Spinner from "../layout/Spinner";
 import { Link } from "react-router-dom";
 import Repos from "../repos/Repos";
-import GithubContext from "../../context/github/githubContext";
+import Organizations from "../organizations/Organizations";
+import {
+  getUser,
+  getUserRepos,
+  getUserOrganizations
+} from "../../actions/gitHubActions";
 
-const User = ({ match }) => {
-  const githubContext = useContext(GithubContext);
-
-  const { getUser, loading, user, repos, getUserRepos } = githubContext;
-
+const User = ({
+  match,
+  github: { user, repos, loading, organizations },
+  getUser,
+  getUserRepos,
+  getUserOrganizations
+}) => {
   useEffect(() => {
     getUser(match.params.login);
+    getUserOrganizations(match.params.login);
     getUserRepos(match.params.login);
+
     // eslint-disable-next-line
   }, []);
+
+  console.log(organizations);
 
   const {
     name,
@@ -97,9 +109,24 @@ const User = ({ match }) => {
         <div className="badge badge-white">Public Repos: {public_repos}</div>
         <div className="badge badge-dark">Public Gists: {public_gists}</div>
       </div>
+      <h2>Repositories (Most recent 5)</h2>
       <Repos repos={repos} />
+      <h2>Organizations</h2>
+      {organizations.length >= 1 ? (
+        <>
+          <Organizations organizations={organizations} />
+        </>
+      ) : (
+        <p>no public organizations...</p>
+      )}
     </div>
   );
 };
-
-export default User;
+const mapStateToProps = state => ({
+  github: state.github
+});
+export default connect(mapStateToProps, {
+  getUser,
+  getUserRepos,
+  getUserOrganizations
+})(User);
